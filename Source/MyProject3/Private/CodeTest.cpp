@@ -28,8 +28,8 @@ void ACodeTest::BeginPlay()
 // 	float result4 = Divide(3, 4);
 // 	UE_LOG(LogTemp, Warning, TEXT("divide result = %.2f"), result4);
 
-	FString result = StringAppender(last, first);
-	UE_LOG(LogTemp, Warning, TEXT("당신의 이름은 %s"), *result);
+// 	FString result = StringAppender(last, first);
+// 	UE_LOG(LogTemp, Warning, TEXT("당신의 이름은 %s"), *result);
 
 	int32 checker = 123;
 	//만일 checker 변수의 값이 짝수라면
@@ -115,6 +115,60 @@ void ACodeTest::BeginPlay()
 // 		}
 // 	}
 
+	
+	/*ages = { 3, 4, 5 };*/
+	
+	//ages의 개수만큼 반복되고 배열 길이가 얼마인지 출력
+// 	for (int32 i = 0; i < ages.Num(); i++)
+// 	{
+// 		UE_LOG(LogTemp, Warning, TEXT("%d"), ages[i]);
+// 	}
+// 
+// 	UE_LOG(LogTemp, Warning, TEXT("Array Length is %d"), ages.Num());
+
+
+	//TMap 사용해보기
+	/*TMap<FString, float> distances;*/
+// 	distances.Add("Seoul", 250.5f);
+// 	distances.Add("Incheon", 450.5f);
+// 	distances.Add("Sungnam", 135.5f);
+	
+// 	FString MyKey = TEXT("Incheon");
+// 	UE_LOG(LogTemp, Warning, TEXT("%s : %f"), *MyKey, distances[MyKey]);
+
+
+	for (auto dist : distances)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s - %f"), *dist.Key, dist.Value);
+	}
+
+// 	int32 number1 = 10;
+// 	int32 copyNum = number1;
+// 	number1 = 30;
+// 
+// 	UE_LOG(LogTemp, Warning, TEXT("number1: %d, copyNum: %d"),number1, copyNum);
+
+// 	int32 number1 = 10;
+// 	int32* copyNum = &number1;
+// 	number1 = 30;
+// 
+// 	UE_LOG(LogTemp, Warning, TEXT("number1: %d, copyNum: %p"), number1, copyNum);
+// 	UE_LOG(LogTemp, Warning, TEXT("number1: %d, copyNum: %d"), number1, *copyNum);
+
+	int32 aa = 10;
+	int32 bb = 15;
+	int32 result;
+	result = Add(&aa, &bb);
+
+	UE_LOG(LogTemp, Warning, TEXT("Result = %d, aa = %d, bb = %d"), result, aa, bb);
+	//값들이 함수 구현부로 복사되고 복사한 값을 넣어서 계산되고 다시 복사해서 출력
+
+	
+
+	pointertest->pt_number = 15;
+
+	*(pointertest->myAge) = 15;
+
 	// number 변수에 3을 넣는다.
 	//number = 3;
 
@@ -122,7 +176,8 @@ void ACodeTest::BeginPlay()
 	//number2 = -7;
 
 
-	fnumber1 = 3.14f;
+
+	/*fnumber1 = 3.14f;*/
 
 
 	//number의 값을 output 콘솔 창에 출력한다.
@@ -149,10 +204,12 @@ void ACodeTest::Tick(float DeltaTime)
 
 }
 
-int32 ACodeTest::Add(int32 num1, int32 num2)
+int32 ACodeTest::Add(int32* num1, int32* num2)
 {
 	//to do
-	return num1 + num2;
+	*num1 *= 2;
+	*num2 *= 2;
+	return *num1 + *num2;
 }
 
 int32 ACodeTest::Subtract(int32 num3, int32 num4)

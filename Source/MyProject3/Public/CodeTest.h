@@ -4,7 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "PointerClass.h"
 #include "CodeTest.generated.h"
+//
+
+/*class APointerClass**/
+//클래스의 존재를 미리 알려줌
 
 UCLASS()
 class MYPROJECT3_API ACodeTest : public AActor
@@ -47,7 +52,7 @@ public:
 
 
 
-	int32 Add(int32 number1, int32 number2);
+	int32 Add(int32* number1, int32* number2);
 	int32 Subtract(int32 number1, int32 number2);
 	int32 Multiply(int32 number1, int32 number2);
 	float Divide(int32 number1, int32 number2);
@@ -68,5 +73,12 @@ public:
 	UPROPERTY(EditAnywhere, Category = CodeVariable)
 	FString first = FString(TEXT("준현"));
 
-	//만일 checker에 들어있는 값이 짝수라면, "Even Number"라고 출력한다. 그렇지 않고 
+	UPROPERTY(EditAnywhere, Category = CodeVariable)
+	TArray<int32> ages;
+
+	UPROPERTY(EditAnywhere, Category = CodeVariable)
+	TMap<FString, float> distances;
+	
+	UPROPERTY(EditAnywhere, Category = CodeVariable)
+	class APointerClass* pointertest;
 };
