@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "InputActionValue.h"
 #include "PlayerFlight.generated.h"
+
 
 UCLASS()
 class MYPROJECT3_API APlayerFlight : public APawn
@@ -38,12 +40,37 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerSettings)
 	TSubclassOf<class ABullet> bulletFactory;
 
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+	class UInputAction* IA_Horizontal;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		class UInputAction* IA_Vertical;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+		class UInputAction* IA_Fire;
+
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+	class UInputMappingContext* IMC_MyMapping;
+
 private:
-	void Horizontal(float value);
-	void Vertical(float value);
+// 	UFUNCTION(BlueprintCallable)
+// 	void Horizontal(float value);
+
+	UFUNCTION(BlueprintCallable)
+	void Horizontal(const FInputActionValue& value);
+
+// 	UFUNCTION(BlueprintCallable)
+// 	void Vertical(float value);
+
+	UFUNCTION(BlueprintCallable)
+	void Vertical(const FInputActionValue& value);
+
+	UFUNCTION(BlueprintCallable)
+	void FireBullet();
 
 	//액션인풋의 경우 매개변수를 비워둬야 함
-	void FireBullet();
+// 	UFUNCTION(BlueprintCallable)
+// 	void FireBullet();
 
 	float h;
 	float v;
