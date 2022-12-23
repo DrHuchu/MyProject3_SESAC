@@ -29,10 +29,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnemySettings")
 	class UStaticMeshComponent* meshComp;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = BulletSettings)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BulletSettings")
 	float moveSpeed = 300.0f;
 
+	UPROPERTY(EditAnywhere, Category = "EnemySettings")
+	float traceRate = 80;
+
+	UFUNCTION()
+	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 private:
 	FVector direction;
-
+	class APlayerFlight* target;
 };

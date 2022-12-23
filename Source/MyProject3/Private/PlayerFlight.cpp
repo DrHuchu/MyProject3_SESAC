@@ -27,6 +27,10 @@ APlayerFlight::APlayerFlight()
 	boxComp->SetBoxExtent(FVector(50.0f));
 	//벡터 값이 XYZ모두 같으면 값 하나만 입력해줘도 된다
 
+	//박스 콜리전의 충돌 처리 프리셋을 "PlayerPreset"으로 설정한다
+	boxComp->SetCollisionProfileName(TEXT("PlayerPreset"));
+
+
 	//메쉬 컴포넌트를 생성
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh"));
 
