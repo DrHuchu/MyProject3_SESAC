@@ -31,8 +31,14 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = BulletSettings)
 	float moveSpeed = 1000.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = BulletSettings)
+	class UParticleSystem* explosion;
+
+
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 private:
 	FVector direction;
+	FTimerHandle lifeTimer;
+	void DestroyMySelf();
 };

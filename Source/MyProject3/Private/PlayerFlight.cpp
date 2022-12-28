@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerFlight::APlayerFlight()
@@ -65,7 +66,21 @@ void APlayerFlight::BeginPlay()
 			subsys->AddMappingContext(IMC_MyMapping, 0);
 		}
 	}
+	
+	//현재 색상 값을 저장한다.
+	UMaterialInterface* iMat = meshComp->GetMaterial(0);
+	FHashedMaterialParameterInfo param = FHashedMaterialParameterInfo(TEXT("Param"));
 
+	//Material Instance에서 벡터 파라미터 값을 initColor 변수에 저장한다.
+	iMat->GetVectorParameterValue(param, initColor);
+
+	UE_LOG(LogTemp, Warning, TEXT("R: %f, G = %f, B = %"), initColor.R, initColor.G, initColor.B);
+
+	//Material Instance를 이용해서 Materianl Instance Dynamic 개체를 만든다.
+	dynamicMaterial = UMaterialInstanceDynamic::Create(iMat, this);
+
+	//생성한 Dynamic Material을 메쉬에 설정한다.
+	meshComp->SetMaterial(0, dynamicMaterial);
 }
 
 // Called every frame
@@ -79,7 +94,7 @@ void APlayerFlight::Tick(float DeltaTime)
 
 	// P = P0 + vt
 	FVector dir = GetActorLocation() + direction * moveSpeed * DeltaTime;
-	SetActorLocation(dir);
+	SetActorLocation(dir, true);
 
 
 }
@@ -107,6 +122,20 @@ void APlayerFlight::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 // 
 // 	//Fire Action 입력에 함수를 연결한다.
 // 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &APlayerFlight::FireBullet);
+}
+
+void APlayerFlight::ReservationHitColor(float time)
+{
+	//1. 색상을 Red로 변경한다.
+	dynamicMaterial->SetVectorParameterValue(TEXT("Param"), (FVector4)FLinearColor::Red);
+
+	//2. 원래 색상으로 되돌리는 함수를 바인딩한 타이머를 예약한다.
+	GetWorld()->GetTimerManager().SetTimer(colorTimer, this, &APlayerFlight::changeOriginColor, 0.2f, false);
+}
+
+void APlayerFlight::changeOriginColor()
+{
+	dynamicMaterial->SetVectorParameterValue(TEXT("Param"), (FVector)initColor);
 }
 
 //좌우 입력이 있을때 실행될 함수
@@ -149,5 +178,8 @@ void APlayerFlight::FireBullet()
 	FActorSpawnParameters param;
 	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	GetWorld()->SpawnActor<ABullet>(bulletFactory, spawnPosition, spawnRotation, param);
+
+	//총알 발사 효과음을 실행한다.
+	UGameplayStatics::PlaySound2D(this, fireSound, 0.2f);
 }
 

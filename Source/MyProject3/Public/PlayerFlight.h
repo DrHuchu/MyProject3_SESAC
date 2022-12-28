@@ -52,6 +52,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
 	class UInputMappingContext* IMC_MyMapping;
 
+	UPROPERTY(EditDefaultsOnly, Category = PlayerSettings)
+	class USoundBase* fireSound;
+
+	void ReservationHitColor(float time);
+	void changeOriginColor();
+
+
 private:
 // 	UFUNCTION(BlueprintCallable)
 // 	void Horizontal(float value);
@@ -76,5 +83,7 @@ private:
 	float v;
 	FVector direction;
 
-	
+	FLinearColor initColor;
+	FTimerHandle colorTimer;
+	class UMaterialInstanceDynamic* dynamicMaterial;
 };

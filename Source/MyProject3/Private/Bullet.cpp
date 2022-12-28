@@ -5,6 +5,8 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Enemy.h"
+#include "Kismet/GameplayStatics.h"
+#include "MyShootingGameModeBase.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -34,10 +36,15 @@ void ABullet::BeginPlay()
 	
 	//충돌(Overlap)이 발생하면 실행할 함수를 연결한다.
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnOverlap);
-
+																																																																																	
 	//오버랩 이벤트가 발생하도록 설정한다.
 	boxComp->SetGenerateOverlapEvents(true);
 
+	//태어난 후 2초 뒤에 제거한다.
+	//SetLifeSpan(2.0f);
+	
+	//TimerManager와 TimerHandle 사용하기
+	GetWorld()->GetTimerManager().SetTimer(lifeTimer, this, &ABullet::DestroyMySelf, 2.0f, false);
 }
 
 // Called every frame
@@ -59,9 +66,24 @@ void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 	AEnemy* enemy = Cast<AEnemy>(OtherActor);
 	if (enemy != nullptr)
 
+	
+	{	//적이 있던 위치에 폭발 이펙트를 생성한다.
+		FVector enemyLoc = enemy->GetActorLocation();
+		FRotator enemyRot = enemy->GetActorRotation();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosion, enemyLoc, enemyRot, true);
+
 		//적을 제거하고
-	{
 		enemy->Destroy();
+
+		//게임 모드에 점수를 1점 추가한다.
+		AGameModeBase* gm = UGameplayStatics::GetGameMode(this);
+		/*AGameModeBase* gm = GetWorld()->GetAuthGameMode();*/
+		//위 두 문장은 같은 기능
+
+		AMyShootingGameModeBase* myGM = Cast<AMyShootingGameModeBase>(gm);
+		myGM->AddScore(1);
+
+		UE_LOG(LogTemp, Warning, TEXT("Point : %d"), myGM->GetCurrentScore());
 	
 
 	//나 자신도 제거한다.
@@ -69,3 +91,7 @@ void ABullet::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherA
 	}
 }
 
+void ABullet::DestroyMySelf()
+{
+	Destroy();
+}
