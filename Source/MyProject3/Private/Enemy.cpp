@@ -47,6 +47,8 @@ void AEnemy::BeginPlay()
 	//1. 추첨을 한다. 확률은 70:30 비율로 한다.
 	int32 drawNumber = FMath::RandRange(1, 100);
 
+	
+
 	//2. 만일, 뽑은 숫자가 30보다 작거나 같으면 정면
 	if (drawNumber <= traceRate)
 
@@ -73,6 +75,9 @@ void AEnemy::BeginPlay()
 			//타겟 방향을 정규화 하지않으면 거리*속도로 이동해서 멀리 떨어질수록 그 이상으로 차이나는 거리로 감
 			targetDir.Normalize();
 			direction = targetDir;
+
+			//target->playerBomb.AddDynamic(this, &AEnemy::DestroyMyself);
+			//target->dirMod.AddDynamic(this, &AEnemy::SetNewDirection);
 		}
 		
 	}
@@ -87,6 +92,15 @@ void AEnemy::BeginPlay()
 	boxComp->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlap);
 	boxComp->SetGenerateOverlapEvents(true);
 
+// 	게임모드에 enemies 배열에 자기 자신을 가리키게 한다.
+// 	AMyShootingGameModeBase* gm = Cast<AMyShootingGameModeBase>(GetWorld()->GetAuthGameMode());
+// 	
+// 	if (gm != nullptr)
+// 	{
+// 	gm->enemies.Add(this);
+// 	}
+	
+	target->dirMod.AddDynamic(this, &AEnemy::SetNewDirection);
 }
 
 // Called every frame
@@ -124,5 +138,31 @@ void AEnemy::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 		Destroy();
 
 	}
+}
+
+void AEnemy::DestroyMyself()
+{
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosion_fx, GetActorLocation(), GetActorRotation(), true);
+	Destroy();
+}
+
+void AEnemy::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+// 	//게임모드에 enemies 배열에 자기 자신을 가리키게 한다.
+// 	AMyShootingGameModeBase* gm = Cast<AMyShootingGameModeBase>(GetWorld()->GetAuthGameMode());
+// 
+// 	if (gm != nullptr)
+// 	{
+// 		gm->enemies.Remove(this);
+// 	}
+
+	//델리게이트에 걸어놓은 자기 함수를 제거한ㄷ;
+	//target->playerBomb.RemoveDynamic(this, &AEnemy::DestroyMyself);
+}
+
+void AEnemy::SetNewDirection(FVector newDir)
+{
+	//이동 방향을 newDir로 바꾼다.
+	direction = newDir;
 }
 

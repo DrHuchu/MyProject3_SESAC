@@ -35,6 +35,9 @@ public:
 	UPROPERTY(EditInstanceOnly, Category = "PoolSettings")
 	class USceneComponent* rootScene;
 
+	UPROPERTY(EditAnywhere, Category = "PoolSettings")
+	bool bossTime = false;
+
 private:
 	float currentTime = 0;
 };

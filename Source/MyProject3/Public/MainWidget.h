@@ -21,5 +21,8 @@ class MYPROJECT3_API UMainWidget : public UUserWidget
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySetting|Score", meta = (BindWidget))
 	class UTextBlock* bestScore;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MySetting|Score", meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* scoreAnim;
+
 	void PrintCurrentScore();
 };

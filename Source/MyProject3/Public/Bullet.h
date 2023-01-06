@@ -34,9 +34,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = BulletSettings)
 	class UParticleSystem* explosion;
 
+	void SetDirection(FVector value);
 
-	UFUNCTION()
-	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+// 	UFUNCTION()
+// 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 private:
 	FVector direction;
 	FTimerHandle lifeTimer;

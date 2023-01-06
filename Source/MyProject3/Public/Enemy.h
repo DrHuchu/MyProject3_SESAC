@@ -33,10 +33,22 @@ public:
 	float moveSpeed = 300.0f;
 
 	UPROPERTY(EditAnywhere, Category = "EnemySettings")
-	float traceRate = 80;
+	float traceRate = 100;
 
 	UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(EditAnywhere, Category = "EnemySettings")
+	class UParticleSystem* explosion_fx;
+
+	UFUNCTION()
+	void DestroyMyself();
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	UFUNCTION()
+	void SetNewDirection(FVector newDir);
+
 private:
 	FVector direction;
 	class APlayerFlight* target;

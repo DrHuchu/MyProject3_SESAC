@@ -22,6 +22,8 @@ public :
 	UPROPERTY(EditAnywhere, Category = "MyDefaultSetting")
 	TSubclassOf<class UMenuWidget> menuWidget;
 
+	TArray<class AEnemy*> enemies;
+
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE int32 GetCurrentScore() { return currentScore;}
 
@@ -33,12 +35,27 @@ public :
 	void AddScore(int32 count);
 
 	void ShowMenu();
+	
+	UFUNCTION()
+	void BossTimer();
 
+	UFUNCTION()
+	void StopAllSpawn();
 
-private:
+	class AEnemySpawningPool* spawner;
+
 	int32 currentScore = 0;
 	int32 bestScore = 0;
 
+	UPROPERTY(EditAnywhere, Category = "Boss Settings")
+	TSubclassOf<class ABossActor> bossFactory;
+
+	UPROPERTY(EditAnywhere, Category = "Boss Settings")
+	TSubclassOf<class AEnemy> enemyFactory;
+
+private:
+	
+	bool bIsAppearBoss = false;
 
 
 	class UMainWidget* main_UI;

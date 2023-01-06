@@ -4,6 +4,7 @@
 #include "KillZone.h"
 #include "Components/BoxComponent.h"
 #include "PlayerFlight.h"
+#include "BossActor.h"
 
 // Sets default values
 AKillZone::AKillZone()
@@ -41,11 +42,16 @@ void AKillZone::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Othe
 	//플레이어를 제외한 부딪힌 모든 대상을 제거한다.
 	//플레이어 플라이트로 캐스팅 해봤을때 플레이어 플라이트가 아니면 널포인터 값을 반환함
 	APlayerFlight* player = Cast<APlayerFlight>(OtherActor);
+	ABossActor* boss = Cast<ABossActor>(OtherActor);
 
 	//플레이어 값이 널포인터가 아니라면 -> 플레이어란 뜻임으로 제거를 하지 않음.
 	if (player != nullptr)
 	{
 
+	}
+	else if(boss != nullptr)
+	{
+		
 	}
 	//플레이어 값이 널포인터가 아니지 않다면 = 널포인터라면, 플레이어가 아니므로 제거함.
 	else {

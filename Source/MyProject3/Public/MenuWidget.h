@@ -27,5 +27,12 @@ class MYPROJECT3_API UMenuWidget : public UUserWidget
 	virtual void NativeConstruct() override;
 
 	private:
+	UFUNCTION()
 	void ResumeGame();
+
+	UFUNCTION()
+	void RestartGame();
+
+	UFUNCTION()
+	void QuitGame();
 };

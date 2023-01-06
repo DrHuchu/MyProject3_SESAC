@@ -5,6 +5,10 @@
 #include "MainWidget.h"
 #include "MenuWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "EnemySpawningPool.h"
+#include "BossActor.h"
+#include "EngineUtils.h"
+#include "Enemy.h"
 
 
 void AMyShootingGameModeBase::BeginPlay()
@@ -32,7 +36,12 @@ void AMyShootingGameModeBase::BeginPlay()
 		//현재 점수를 위젯의 curScore 텍스트 블록에 반영한다.
 		main_UI->PrintCurrentScore();
 	}
+
+	/*FString testPath = FPaths::GetProjectFilePath();*/
+	FString testPath = FPaths::ProjectContentDir() + TEXT("SaveScore/SaveScore.txt");
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *testPath);
 }
+
 
 void AMyShootingGameModeBase::AddScore(int32 count)
 {
@@ -49,6 +58,18 @@ void AMyShootingGameModeBase::AddScore(int32 count)
 
 		/*UE_LOG(LogTemp, Warning, TEXT("%s"), isSaved ? TEXT("True") : TEXT("False"));*/
 	}
+	//만일, 현재 점수가 30점 이상이면
+	if (currentScore >= 30 && !bIsAppearBoss)
+	{
+		bIsAppearBoss = true;
+		UE_LOG(LogTemp, Warning, TEXT("boss on"));
+		//4초 뒤에 보스를 생성한다.
+	
+		FTimerHandle bossTimer;
+		GetWorld()->GetTimerManager().SetTimer(bossTimer, this, &AMyShootingGameModeBase::BossTimer, 2, false);
+
+		StopAllSpawn();
+	}
 
 	//현재 점수를 위젯의 curScore 텍스트 블록에 반영한다.
 	if(main_UI != nullptr)
@@ -56,6 +77,7 @@ void AMyShootingGameModeBase::AddScore(int32 count)
 		main_UI->PrintCurrentScore();
 	}
 }
+
 
 void AMyShootingGameModeBase::ShowMenu()
 {
@@ -76,3 +98,18 @@ void AMyShootingGameModeBase::ShowMenu()
 	//마우스 커서를 보이게 한다.
 	GetWorld()->GetFirstPlayerController()->SetShowMouseCursor(true);
 }
+
+void AMyShootingGameModeBase::BossTimer()
+{
+	UE_LOG(LogTemp, Warning, TEXT("boss appearrrrr"));
+	GetWorld()->SpawnActor<ABossActor>(bossFactory, FVector(0,0,780), FRotator(0,0,0));
+}
+
+void AMyShootingGameModeBase::StopAllSpawn()
+{
+	for (TActorIterator<AEnemySpawningPool> pool(GetWorld()); pool; ++pool)
+	{
+		pool->SetActorTickEnabled(false);
+	}
+}
+

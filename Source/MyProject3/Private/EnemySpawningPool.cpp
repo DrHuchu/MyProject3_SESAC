@@ -31,6 +31,7 @@ void AEnemySpawningPool::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(!bossTime){
 	//경과된 시간을 누적시킨다.
 	currentTime += DeltaTime;
 
@@ -44,7 +45,10 @@ void AEnemySpawningPool::Tick(float DeltaTime)
 		//누적된 시간을 0초로 초기화한다.
 		currentTime = 0;
 	}
-
+	}
+	else {
+		currentTime = 0;
+	}
 	
 
 }
