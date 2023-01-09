@@ -8,6 +8,7 @@
 #include "PlayerFlight.h"
 #include "EngineUtils.h"
 #include "MyShootingGameModeBase.h"
+#include "MyShootingLibrary.h"
 
 // Sets default values
 AEnemy::AEnemy()

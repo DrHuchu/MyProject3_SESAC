@@ -115,6 +115,8 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void BoostOff();
 
+	void CheckEnemies();
+
 	void Boosting();
 
 	bool isBoosting = false;
